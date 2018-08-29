@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <!--<group android:checkableBehavior="single">-->
+
+    <item android:title="Catálogo Principal">
+        <menu>
+                <item
+                    android:id="@+id/nav_invitaciones"
+                    android:icon="@drawable/ic_invitation1"
+                    android:title="Invitaciones" />
+                <item
+                    android:id="@+id/nav_pub_escrita"
+                    android:icon="@drawable/ic_restmenu"
+                    android:title="Publicidad Escrita" />
+                <item
+                    android:id="@+id/nav_playeras"
+                    android:icon="@drawable/ic_tshirt"
+                    android:title="Playeras, Tazas y Gorras" />
+                <item
+                    android:id="@+id/nav_configuracion"
+                    android:icon="@drawable/ic_menu_manage"
+                    android:title="Configuración" />
+        </menu>
+    </item>
+    <!--</group>-->
+    <item android:title="Screenshot">
+        <menu>
+            <item
+                android:id="@+id/nav_camera"
+                android:icon="@drawable/ic_menu_camera"
+                android:title="Camera" />
+        </menu>
+    </item>
+    <item android:title="Social Media">
+        <menu>
+            <item
+                android:id="@+id/nav_share"
+                android:icon="@drawable/ic_menu_share"
+                android:title="Share" />
+            <item
+                android:id="@+id/nav_send"
+                android:icon="@drawable/ic_menu_send"
+                android:title="Send" />
+        </menu>
+    </item>
+    <item android:title="Log out">
+        <menu>
+            <item
+                android:id="@+id/nav_exit"
+                android:icon="@drawable/ic_close_session"
+                android:title="Close session"
+                />
+        </menu>
+    </item>
+
+</menu>

@@ -1,0 +1,21 @@
+<resources>
+    <string name="app_name">Singularia</string>
+    <string name="title_activity_inicio">Inicio</string>
+
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
+
+    <string name="action_settings">Settings</string>
+    <string name="title_activity_invitaciones">Invitaciones</string>
+    <string name="section_format">Hello World from section: %1$d</string>
+    <string name="URL_IMG_BODA">https://www.lomejorenbodas.com/wp-content/uploads/2016/12/Boda-catolica.jpg</string>
+    <array name="Invitaciones">
+        <item>Boda</item>
+        <item>Xv años</item>
+        <item>Fiesta Temática</item>
+        <item>Fiesta Infantil</item>
+        <item>Baby Shower</item>
+        <item>Bautizo</item>
+        <item>Graduación</item>
+    </array>
+</resources>

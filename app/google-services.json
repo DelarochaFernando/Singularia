@@ -1,0 +1,42 @@
+{
+  "project_info": {
+    "project_number": "630224757398",
+    "firebase_url": "https://singularia-fase1-2018.firebaseio.com",
+    "project_id": "singularia-fase1-2018",
+    "storage_bucket": "singularia-fase1-2018.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:630224757398:android:1c68d8ad4b3b00e1",
+        "android_client_info": {
+          "package_name": "com.delarocha.singularia"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "630224757398-1u4hggerkip9joght1g6i10moet9ubf9.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCKGBQf5s56L2C1CAIWAEK4oeBC8VM7Lb8"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

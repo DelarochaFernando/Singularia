@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="com.delarocha.singularia">
+
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
+    <uses-permission android:name="android.permission.CAMERA" />
+    <uses-feature
+        android:name="android.hardware.camera.any"
+        android:required="true" />
+    <uses-feature
+        android:name="android.hardware.camera.autofocus"
+        android:required="false" />
+
+    <application
+        android:allowBackup="true"
+        android:icon="@drawable/ic_singularia_app"
+        android:label="@string/app_name"
+        android:supportsRtl="true"
+        android:theme="@style/AppTheme">
+        <activity
+            android:name=".activities.MainActivity"
+            android:theme="@style/AppTheme.NoActionBar">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name=".activities.InicioActivity"
+            android:parentActivityName=".activities.MainActivity"
+            android:theme="@style/AppTheme.NoActionBar">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.delarocha.singularia.activities.MainActivity" />
+        </activity>
+        <activity
+            android:name=".activities.LoginActivity"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".activities.PubEscritaActivity"
+            android:label="@string/title_activity_invitaciones"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity android:name=".activities.TipoInvitaActivity" />
+        <activity android:name=".activities.invita.InvitaBoda" />
+        <activity android:name=".activities.invita.InvitaBabyShower" />
+        <activity android:name=".activities.invita.InvitaBautizo" />
+        <activity android:name=".activities.invita.InvitaFiestaInf" />
+        <activity android:name=".activities.invita.InvitaXVAnos" />
+        <activity android:name=".activities.invita.InvitaGraduacion" />
+        <activity android:name=".activities.invita.InvitaFiestaTem" />
+        <activity android:name=".activities.invita.InvitaDespedida" />
+        <activity android:name=".activities.SignUpActivity"></activity>
+    </application>
+
+</manifest>
