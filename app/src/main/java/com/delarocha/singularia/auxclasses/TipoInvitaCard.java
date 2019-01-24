@@ -2,16 +2,18 @@ package com.delarocha.singularia.auxclasses;
 
 public class TipoInvitaCard {
 
-    String titulo;
-    int imageSource;
+    private String titulo;
+    private int imageSource;
+    private String url;
 
     public TipoInvitaCard(){
 
     }
 
-    public TipoInvitaCard(String titulo, int imageSource){
+    public TipoInvitaCard(String titulo, int imageSource, String url){
         this.titulo = titulo;
         this.imageSource = imageSource;
+        this.url = url;
     }
 
     public String getTitulo() {
@@ -30,9 +32,11 @@ public class TipoInvitaCard {
         this.imageSource = imageSource;
     }
 
+    public String getUrl() {
+        return url;
+    }
 
-
-
-
-
+    public void setUrl(String url) {
+        this.url = url;
+    }
 }

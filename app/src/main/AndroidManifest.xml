@@ -3,9 +3,10 @@
     package="com.delarocha.singularia">
 
     <uses-permission android:name="android.permission.INTERNET" />
-    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
-    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.CAMERA" />
+
     <uses-feature
         android:name="android.hardware.camera.any"
         android:required="true" />
@@ -38,21 +39,27 @@
         </activity>
         <activity
             android:name=".activities.LoginActivity"
-            android:theme="@style/AppTheme.NoActionBar" />
+            android:theme="@style/AppTheme.NoActionBar"
+            android:configChanges="keyboard|keyboardHidden|orientation|screenSize"/>
         <activity
             android:name=".activities.PubEscritaActivity"
             android:label="@string/title_activity_invitaciones"
             android:theme="@style/AppTheme.NoActionBar" />
-        <activity android:name=".activities.TipoInvitaActivity" />
-        <activity android:name=".activities.invita.InvitaBoda" />
-        <activity android:name=".activities.invita.InvitaBabyShower" />
-        <activity android:name=".activities.invita.InvitaBautizo" />
-        <activity android:name=".activities.invita.InvitaFiestaInf" />
-        <activity android:name=".activities.invita.InvitaXVAnos" />
-        <activity android:name=".activities.invita.InvitaGraduacion" />
-        <activity android:name=".activities.invita.InvitaFiestaTem" />
-        <activity android:name=".activities.invita.InvitaDespedida" />
-        <activity android:name=".activities.SignUpActivity"></activity>
+        <activity android:name=".activities.TipoInvitaActivity" android:noHistory="false" />
+        <activity android:name=".activities.invita.InvitaBoda" android:noHistory="false" />
+        <activity android:name=".activities.invita.InvitaBabyShower" android:noHistory="false" />
+        <activity android:name=".activities.invita.InvitaBautizo" android:noHistory="false"/>
+        <activity android:name=".activities.invita.InvitaFiestaInf" android:noHistory="false"/>
+        <activity android:name=".activities.invita.InvitaXVAnos" android:noHistory="false"/>
+        <activity android:name=".activities.invita.InvitaGraduacion" android:noHistory="false"/>
+        <activity android:name=".activities.invita.InvitaFiestaTem" android:noHistory="false"/>
+        <activity android:name=".activities.invita.InvitaDespedida" android:noHistory="false"/>
+        <activity android:name=".activities.SignUpActivity" android:noHistory="false"/>
+        <activity
+            android:name=".activities.InicioActivity2"
+            android:label="@string/title_activity_inicio22"
+            android:theme="@style/AppTheme.NoActionBar"></activity>
+        <activity android:name=".activities.ResetPassword" android:noHistory="false"></activity>
     </application>
 
 </manifest>

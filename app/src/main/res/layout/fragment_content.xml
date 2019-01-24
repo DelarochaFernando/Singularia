@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#fff"
+    tools:context="com.delarocha.singularia.auxclasses.ContentFragment">
+    <!--tools:context="com.alimuzaffar.loopingviewpagerdemo.ContentFragment"-->
+
+    <!-- TODO: Update blank fragment layout -->
+    <RelativeLayout
+        android:layout_height="wrap_content"
+        android:layout_width="match_parent">
+        <ImageView
+            android:id="@+id/img_promo"
+            android:layout_marginTop="100dp"
+            android:layout_centerHorizontal="true"
+            android:layout_width="400dp"
+            android:layout_height="400dp"
+            android:scaleType="fitXY"/>
+        <TextView
+            android:id="@+id/text"
+            android:textColor="@color/colorPrimaryDark"
+            android:layout_below="@+id/img_promo"
+            android:layout_marginTop="16dp"
+            android:layout_centerHorizontal="true"
+            android:gravity="center"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="20dp"
+            android:text="" />
+    </RelativeLayout>
+</FrameLayout>

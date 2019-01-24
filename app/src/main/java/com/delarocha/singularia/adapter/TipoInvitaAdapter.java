@@ -2,6 +2,7 @@ package com.delarocha.singularia.adapter;
 
 import android.content.Context;
 import android.content.Intent;
+import android.os.Bundle;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -19,6 +20,7 @@ import com.delarocha.singularia.activities.invita.InvitaFiestaTem;
 import com.delarocha.singularia.activities.invita.InvitaGraduacion;
 import com.delarocha.singularia.activities.invita.InvitaXVAnos;
 import com.delarocha.singularia.auxclasses.TipoInvitaCard;
+import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 
@@ -28,15 +30,17 @@ public class TipoInvitaAdapter extends RecyclerView.Adapter<TipoInvitaAdapter.Ti
         private ArrayList<TipoInvitaCard> ArrayListInvitaciones;
         private TipoInvitaCard invitaCard;
         private Class[] classArray;
+        private Bundle extras;
+        //private Picasso picasso;
 
-    public TipoInvitaAdapter(Context context, ArrayList<TipoInvitaCard> arrayList){
+    public TipoInvitaAdapter(Context context, ArrayList<TipoInvitaCard> arrayList, Bundle extras){
         this.ctx = context;
         this.ArrayListInvitaciones = arrayList;
         this.invitaCard = new TipoInvitaCard();
         this.classArray = new Class[arrayList.size()];
+        this.extras = extras;
         prepareClassArray();
     }
-
 
     @Override
     public TipoInvitaVH onCreateViewHolder(ViewGroup parent, int viewType) {
@@ -48,7 +52,8 @@ public class TipoInvitaAdapter extends RecyclerView.Adapter<TipoInvitaAdapter.Ti
     @Override
     public void onBindViewHolder(TipoInvitaVH holder, final int position) {
         invitaCard = ArrayListInvitaciones.get(position);
-        holder.imgVCard.setBackgroundResource(invitaCard.getImageSource());
+        Picasso.with(ctx).load(invitaCard.getUrl()).fit().into(holder.imgVCard);
+        //holder.imgVCard.setBackgroundResource(invitaCard.getImageSource());
         String titulo = invitaCard.getTitulo();
 
         if(titulo.equals("Despedida de Soltero(a)")){
@@ -61,11 +66,13 @@ public class TipoInvitaAdapter extends RecyclerView.Adapter<TipoInvitaAdapter.Ti
         try{
 
             holder.imgVCard.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                ctx.startActivity(new Intent(ctx,classArray[position]));
-            }
-        });
+                @Override
+                public void onClick(View view) {
+                    ctx.startActivity(new Intent(ctx,classArray[position])
+                    .putExtra("email",extras.getString("email"))
+                    .putExtra("psw",extras.getString("psw")));
+                }
+            });
 
         }catch (Exception e){
             e.printStackTrace();

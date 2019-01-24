@@ -258,7 +258,7 @@ public class SignUpActivity extends AppCompatActivity {
                         .setTitle("Atención")
                         .setMessage("¿Deseas terminar la creación de la cuenta?")
                         .setMessage("La información se perderá.")
-                        .setPositiveButton("Aceptart",new DialogInterface.OnClickListener() {
+                        .setPositiveButton("Aceptar",new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialogInterface, int i) {
                                 startActivity(new Intent(SignUpActivity.this, LoginActivity.class));

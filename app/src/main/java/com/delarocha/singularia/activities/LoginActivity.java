@@ -13,12 +13,14 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.delarocha.singularia.BuildConfig;
 import com.delarocha.singularia.R;
 import com.delarocha.singularia.auxclasses.Account;
+import com.delarocha.singularia.auxclasses.Tools;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -39,10 +41,11 @@ public class LoginActivity extends AppCompatActivity {
     private EditText editUser, editPsw;
     private ProgressBar progressBar;
     private Button btnLogin;
+    private LinearLayout layout_recover, linearSignUp;
     private TextView versionApp, txtSignUp;
     private int versionCode = 0;
     private String VERSION_NAME = BuildConfig.VERSION_NAME;
-    public static String FIRESTORE_ACCOUNTS_COLLECTION = "accounts";
+
     private Context context = this;
     private String email, psw, message;
     private Account mAccount;
@@ -66,15 +69,16 @@ public class LoginActivity extends AppCompatActivity {
         editPsw.setText("fer123");
         progressBar = (ProgressBar)findViewById(R.id.progressbar);
         btnLogin = (Button)findViewById(R.id.btnLogin);
+        layout_recover = (LinearLayout)findViewById(R.id.layout_recover);
         versionApp = (TextView)findViewById(R.id.textVersionApp);
         txtSignUp = (TextView)findViewById(R.id.txtSignUp);
+        linearSignUp = (LinearLayout) findViewById(R.id.linearSignUp);
         versionApp.setText("version: "+VERSION_NAME);
 
         mAuth = FirebaseAuth.getInstance();
         mUser  = mAuth.getCurrentUser();
         mFireStoreDB = FirebaseFirestore.getInstance();
         //docRef.
-
 
 
         btnLogin.setOnClickListener(new View.OnClickListener() {
@@ -89,6 +93,20 @@ public class LoginActivity extends AppCompatActivity {
                     getUsuario(email, psw);
                     //userLogin(email, psw);
                 }
+            }
+        });
+
+        layout_recover.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                startActivity(new Intent(LoginActivity.this, ResetPassword.class));
+            }
+        });
+
+        linearSignUp.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                startActivity(new Intent(context, SignUpActivity.class));
             }
         });
         txtSignUp.setOnClickListener(new View.OnClickListener() {
@@ -126,6 +144,7 @@ public class LoginActivity extends AppCompatActivity {
                     .setPositiveButton("Aceptar", new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialogInterface, int i) {
+                            progressBar.setVisibility(View.GONE);
                             dialogInterface.dismiss();
                         }
                     }).show();
@@ -189,7 +208,7 @@ public class LoginActivity extends AppCompatActivity {
                             }).create();
                     dialog.show();*/
                 }else{
-                    /*String message = task.getException().getMessage();
+                    String message = task.getException().getMessage();
                     AlertDialog dialog = new AlertDialog.Builder(context)
                             .setTitle("Error.")
                             .setIcon(R.drawable.ic_red_error)
@@ -200,7 +219,7 @@ public class LoginActivity extends AppCompatActivity {
                                 public void onClick(DialogInterface dialogInterface, int i) {
                                     dialogInterface.dismiss();
                                 }
-                            }).show();*/
+                            }).show();
                 }
             }
         });
@@ -213,7 +232,7 @@ public class LoginActivity extends AppCompatActivity {
 
         try{
             //Map<String, Object> account = new HashMap<>();
-            docRef = mFireStoreDB.collection(FIRESTORE_ACCOUNTS_COLLECTION).document(email+"-"+psw);
+            docRef = mFireStoreDB.collection(Tools.FIRESTORE_ACCOUNTS_COLLECTION).document(email+"-"+psw);
             docRef.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
                 @Override
                 public void onSuccess(DocumentSnapshot documentSnapshot) {
@@ -230,12 +249,14 @@ public class LoginActivity extends AppCompatActivity {
                        message = mAccount.getNombre();
                        showDialogLogin(0,message);
                     }else{
-
+                        message = "Verifica que Contraseña ó User sean correctos.";
+                        showDialogLogin(1,message);
                     }
                 }
             }).addOnFailureListener(new OnFailureListener() {
                 @Override
                 public void onFailure(@NonNull Exception e) {
+                    progressBar.setVisibility(View.GONE);
                     message = e.getMessage();
                     showDialogLogin(1,message);
                 }
@@ -261,13 +282,20 @@ public class LoginActivity extends AppCompatActivity {
                     }
                 }
             });*/
-
         }catch (Exception e){
             e.printStackTrace();
         }
         //return user[0];
     }
-
+    /*public void goRecoverPassword(View view){
+        view.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(LoginActivity.this, ResetPassword.class);
+                startActivity(intent);
+            }
+        });
+    }*/
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
         boolean choice = true;

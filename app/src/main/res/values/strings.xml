@@ -18,4 +18,16 @@
         <item>Bautizo</item>
         <item>Graduación</item>
     </array>
+    <string-array name="cantidad_invitaciones_boda">
+        <item>0</item>
+        <item>250</item>
+        <item>350</item>
+        <item>450</item>
+    </string-array>
+    <string name="title_activity_inicio22">Inicio</string>
+    <string name="btn_reset_password">Reset Password</string>
+    <string name="hint_email">Email</string>
+    <string name="btn_back">Back</string>
+    <string name="lbl_forgot_password">¿Olvidaste Tú Contraseña?</string>
+    <string name="forgot_password_msg">Ingresa una cuenta de correo electrónico a la que se enviarán las instrucciones para recuperar tu contraseña.</string>
 </resources>

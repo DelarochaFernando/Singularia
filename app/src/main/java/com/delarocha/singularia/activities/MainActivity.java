@@ -29,17 +29,15 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        progress = ProgressDialog.show(MainActivity.this,"Cargando Datos","Cargando...");
+        //progress = ProgressDialog.show(MainActivity.this,"Cargando Datos","Cargando...");
         //FirebaseFirestore db = FirebaseFirestore.getInstance();
-       progress.show();
+       //progress.show();
         Handler handler = new Handler();
         handler.postDelayed(new Runnable() {
             @Override
             public void run() {
-                progress.dismiss();
-
-                Intent intent = new Intent(MainActivity.this, LoginActivity.class);
-                startActivity(intent);
+                //progress.dismiss();
+                startActivity(new Intent(MainActivity.this, LoginActivity.class));
             }
         },4000);
 

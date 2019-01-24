@@ -46,7 +46,7 @@ public class TipoInvitaActivity extends AppCompatActivity {
 
         prepareCards();
         recyclerTipoInvita = (RecyclerView)findViewById(R.id.recyclerTipoInvita);
-        mTipoInvitaAdapter = new TipoInvitaAdapter(this,mTipoInvitaList);
+        mTipoInvitaAdapter = new TipoInvitaAdapter(this,mTipoInvitaList,extras);
         recyclerTipoInvita.setAdapter(mTipoInvitaAdapter);
         mLayoutManager = new GridLayoutManager(this,2);
         recyclerTipoInvita.setLayoutManager(mLayoutManager);
@@ -97,8 +97,19 @@ public class TipoInvitaActivity extends AppCompatActivity {
                 "Fiesta Temática",
                 "Despedida de Soltero(a)"
         };
+
+        String[] arrayUrlImage = new String[]{
+            "https://www.lomejorenbodas.com/wp-content/uploads/2016/12/Boda-catolica.jpg",
+            "https://i1.wp.com/maternidadfacil.com/wp-content/uploads/2016/04/baby-shower3.jpg?fit=1024%2C1024&ssl=1",
+            "https://www.loscincoenebros.com/wp-content/uploads/2018/03/organizar-un-bautizo.jpg",
+            "https://static.vix.com/es/sites/default/files/styles/large/public/imj/hogartotal/d/decoraciones-con-globos-para-fiestas-infantiles-1.jpg?itok=3ICV8iJ_",
+            "https://static.vix.com/es/sites/default/files/styles/large/public/imj/elgrancatador/i/ideas-de-tragos-para-cumple-de-quince-1.jpg?itok=YfT4i92k",
+            "https://www.elsoldepuebla.com.mx/incoming/vema4b-graduacion.jpg/alternates/LANDSCAPE_768/graduacion.jpg",
+            "http://www.laduendeneta.com/fiestas/1Flower.jpg",
+            "https://media.istockphoto.com/photos/bride-having-fun-on-her-bachelorette-party-picture-id491974030?k=6&m=491974030&s=612x612&w=0&h=8j-eGP0dymN_n9D-aUW2-NDYrV_HRDV11Yk1zgmVjCk="
+        };
         for(int i = 0; i < cardImage.length;i++){
-            TipoInvitaCard tic = new TipoInvitaCard(tituloTipoInvita[i],cardImage[i]);
+            TipoInvitaCard tic = new TipoInvitaCard(tituloTipoInvita[i],cardImage[i], arrayUrlImage[i]);
             mTipoInvitaList.add(tic);
         }
     }

@@ -10,4 +10,7 @@
     <color name="grey_300">#E0E0E0</color>
     <color name="grey_500">#9E9E9E</color>
     <color name="colorWhite">#FFFFFF</color>
+    <color name="White">#FFFF</color>
+    <color name="background_footer">#3300796B</color>
+    <color name="colorBlack">#000</color>
 </resources>
