@@ -1,9 +1,10 @@
 package com.delarocha.singularia.activities.invita;
 
 import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
+//import android.support.v7.app.AppCompatActivity;
 
 import com.delarocha.singularia.R;
+import androidx.appcompat.app.AppCompatActivity;
 
 public class InvitaBautizo extends AppCompatActivity {
 

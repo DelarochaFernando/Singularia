@@ -12,21 +12,55 @@
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
     tools:context="com.delarocha.singularia.activities.LoginActivity">
-    <ImageView
-        android:id="@+id/imageLogo"
+    <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:src="@drawable/singularia_name"
-        android:layout_marginBottom="40dp"
-        android:scaleType="centerInside"/>
+        android:layout_height="150dp">
+        <ImageView
+            android:id="@+id/imageLogo"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_gravity="center"
+            android:src="@drawable/singularia_name"
+            android:scaleType="centerInside"/>
+    </RelativeLayout>
+
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_margin="8dp"
         android:orientation="vertical">
-        <android.support.design.widget.TextInputLayout
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:hintTextAppearance="@style/TextAppearance.App.TextInputLayout.PrimaryDark"
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+            android:hint="User">
+
+            <!--style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"-->
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/editUser"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textColor="@color/colorPrimaryDark"
+                android:inputType="textEmailAddress"/>
+
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <!--<android.support.design.widget.TextInputLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             app:hintTextAppearance="@style/TextAppearance.App.TextInputLayout">
+            <android.support.design.widget.TextInputEditText
+                android:id="@+id/editUser"
+                android:layout_width="400dp"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:textColor="@color/colorPrimaryDark"
+                android:inputType="textEmailAddress"
+                android:hint="User"
+                ></android.support.design.widget.TextInputEditText>
             <EditText
                 android:id="@+id/editUser"
                 android:layout_width="400dp"
@@ -35,16 +69,45 @@
                 android:textColor="@color/colorPrimaryDark"
                 android:inputType="textEmailAddress"
                 android:hint="User"/>
-        </android.support.design.widget.TextInputLayout>
+        </android.support.design.widget.TextInputLayout>-->
     </LinearLayout>
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_margin="8dp"
         android:orientation="vertical">
-        <android.support.design.widget.TextInputLayout
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:hintTextAppearance="@style/TextAppearance.App.TextInputLayout.PrimaryDark"
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+            android:hint="Password">
+            <!--style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"-->
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/editPsw"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textColor="@color/colorPrimaryDark"
+                android:maxLength="8"
+                app:passwordToggleEnabled="true"
+                android:inputType="text|textPassword"/>
+
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <!--<android.support.design.widget.TextInputLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             app:hintTextAppearance="@style/TextAppearance.App.TextInputLayout">
+            <android.support.design.widget.TextInputEditText
+                android:id="@+id/editPsw"
+                android:layout_width="400dp"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:inputType="textPassword"
+                android:maxLength="8"
+                android:textColor="@color/colorPrimaryDark"
+                android:hint="Password" />
             <EditText
                 android:id="@+id/editPsw"
                 android:layout_width="400dp"
@@ -54,44 +117,58 @@
                 android:maxLength="8"
                 android:textColor="@color/colorPrimaryDark"
                 android:hint="Password" />
-        </android.support.design.widget.TextInputLayout>
+        </android.support.design.widget.TextInputLayout>-->
     </LinearLayout>
     <ProgressBar
         android:id="@+id/progressbar"
-        android:layout_width="wrap_content"
+        android:layout_width="200dp"
         android:layout_height="wrap_content"
+        style="@style/Widget.AppCompat.ProgressBar.Horizontal"
+        android:indeterminate="true"
+        android:layout_marginTop="8dp"
         android:visibility="gone"
         android:layout_gravity="center"/>
-    <Button
+    <com.google.android.material.button.MaterialButton
         android:id="@+id/btnLogin"
         android:layout_marginTop="@dimen/activity_vertical_margin"
         android:layout_width="250dp"
         android:layout_gravity="center"
         android:layout_height="wrap_content"
         android:background="@drawable/roundedshape_button"
+        android:textAllCaps="false"
         android:text="Login"
         android:textColor="#FFFF"/>
     <LinearLayout
         android:id="@+id/linearSignUp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_margin="20sp"
+        android:layout_margin="10dp"
         android:orientation="horizontal"
         android:clickable="true">
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginStart="70dp"
             android:textColor="@color/colorPrimaryDark"
-            android:layout_marginLeft="175dp"
             android:text="Crea tu Cuenta"/>
-        <TextView
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btnSignUp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="10dp"
+            android:textAllCaps="false"
+            android:text="Ahora mismo."
+            android:textStyle="bold"
+            style="@style/Widget.MaterialComponents.Button.TextButton"
+            android:textColor="@color/colorPrimaryDark" />
+        <!--<TextView
             android:id="@+id/txtSignUp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textColor="@color/colorPrimaryDark"
             android:textStyle="bold"
             android:layout_marginLeft="10dp"
-            android:text="Ahora mismo."/>
+            android:text="Ahora mismo."/>-->
     </LinearLayout>
     <!--<TextView
         android:id="@+id/txtSignUp"
@@ -128,8 +205,9 @@
     <LinearLayout
         android:id="@+id/layout_recover"
         android:orientation="vertical"
-        android:layout_width="wrap_content"
+        android:layout_width="350dp"
         android:layout_height="wrap_content"
+        android:focusable="true"
         android:clickable="true"
         android:layout_gravity="center"
         android:layout_below="@+id/btnLogin">
@@ -139,10 +217,21 @@
             android:layout_height="wrap_content"
             android:focusable="true"
             android:clickable="true"
-            android:layout_marginTop="90sp"
+            android:layout_marginTop="10dp"
+            android:layout_gravity="center"
             android:textColor="@color/colorPrimaryDark"
             android:text="¿Olvidaste tu contraseña?"/>
-        <TextView
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btn_recupera_psw"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:textAllCaps="false"
+            android:textStyle="bold"
+            style="@style/Widget.MaterialComponents.Button.TextButton"
+            android:text="@string/Recupera_psw"
+            android:textColor="@color/colorPrimaryDark" />
+        <!--<TextView
             android:id="@+id/text3"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -152,13 +241,13 @@
             android:textStyle="bold"
             android:layout_gravity="center"
             android:textColor="@color/colorPrimaryDark"
-            android:layout_below="@+id/text2"/>
+            android:layout_below="@+id/text2"/>-->
     </LinearLayout>
     <TextView
         android:id="@+id/textVersionApp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="150dp"
+        android:layout_marginTop="40dp"
         android:text="Version X.X.X"
         android:layout_gravity="center"
         android:textColor="@color/colorPrimaryDark"

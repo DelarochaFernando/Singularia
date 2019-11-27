@@ -1,14 +1,4 @@
 <resources>
-    <string name="app_name">Singularia</string>
-    <string name="title_activity_inicio">Inicio</string>
-
-    <string name="navigation_drawer_open">Open navigation drawer</string>
-    <string name="navigation_drawer_close">Close navigation drawer</string>
-
-    <string name="action_settings">Settings</string>
-    <string name="title_activity_invitaciones">Invitaciones</string>
-    <string name="section_format">Hello World from section: %1$d</string>
-    <string name="URL_IMG_BODA">https://www.lomejorenbodas.com/wp-content/uploads/2016/12/Boda-catolica.jpg</string>
     <array name="Invitaciones">
         <item>Boda</item>
         <item>Xv años</item>
@@ -18,16 +8,62 @@
         <item>Bautizo</item>
         <item>Graduación</item>
     </array>
+    <string name="app_name">Singularia</string>
+
+    <string name="title_activity_inicio">Inicio</string>
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
+
+    <string name="ImageGalleryActivityTitle">Galería de Imágenes</string>
+    <string name="action_settings">Settings</string>
+    <string name="title_activity_invitaciones">Invitaciones</string>
+    <string name="section_format">Hello World from section: %1$d</string>
+    <string name="URL_IMG_BODA">https://www.lomejorenbodas.com/wp-content/uploads/2016/12/Boda-catolica.jpg</string>
+    <string name="title_activity_inicio22">Inicio</string>
+    <string name="btn_reset_password">Reset Password</string>
+    <string name="hint_email">Email</string>
+    <string name="hint_res_seguridad">Respuesta</string>
+    <string name="hint_username">Usuario</string>
+    <string name="btn_back">Back</string>
+    <string name="Recupera_psw">Recupérala</string>
+    <string name="lbl_forgot_password">¿Olvidaste Tú Contraseña?</string>
+    <string name="forgot_password_msg">Ingresa la cuenta de correo electrónico del Usuario a la que se enviarán las instrucciones para recuperar la contraseña.</string>
+    <string name="forgot_password_msg_usertyped">Se enviarán las instrucciones para recuperar la contraseña a la cuenta proporcionada.</string>
     <string-array name="cantidad_invitaciones_boda">
         <item>0</item>
         <item>250</item>
         <item>350</item>
         <item>450</item>
     </string-array>
-    <string name="title_activity_inicio22">Inicio</string>
-    <string name="btn_reset_password">Reset Password</string>
-    <string name="hint_email">Email</string>
-    <string name="btn_back">Back</string>
-    <string name="lbl_forgot_password">¿Olvidaste Tú Contraseña?</string>
-    <string name="forgot_password_msg">Ingresa una cuenta de correo electrónico a la que se enviarán las instrucciones para recuperar tu contraseña.</string>
+    <string-array name="cantidad_invitaciones_shopcart">
+        <item>250</item>
+        <item>350</item>
+        <item>450</item>
+    </string-array>
+    <string-array name="security_questions_es">
+        <item>N/A</item>
+        <item>¿Cuál es tu libro favorito?</item>
+        <item>¿Cuál es el nombre de la colonia donde creciste?</item>
+        <item>¿Cuál es el apellido de soltera de tu madre?</item>
+        <item>¿Cuál es el nombre de tu primer/actual/favorita mascota?</item>
+        <item>¿Cuál fué la primer compañía para la que trabajaste?</item>
+        <item>¿Dónde conociste a tu esposa?</item>
+        <item>¿A dónde asististe a la preparatoria/Universidad?</item>
+        <item>¿Cuál es tu comida favorita?</item>
+        <item>¿En qué ciudad naciste?</item>
+        <item>¿Cuál es tu lugar favorito para vacacionar?</item>
+    </string-array>
+    <string-array name="security_questions_en">
+        <item>N/D</item>
+        <item>What Is your favorite book?</item>
+        <item>What is the name of the road you grew up on?</item>
+        <item>What is your mother’s maiden name?</item>
+        <item>What was the name of your first/current/favorite pet?</item>
+        <item>What was the first company that you worked for?</item>
+        <item>Where did you meet your spouse?</item>
+        <item>Where did you go to high school/college?</item>
+        <item>What is your favorite food?</item>
+        <item>What city were you born in?</item>
+        <item>Where is your favorite place to vacation?</item>
+    </string-array>
 </resources>

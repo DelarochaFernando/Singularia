@@ -1,19 +1,24 @@
 package com.delarocha.singularia.activities.invita;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
-import android.support.v4.view.MenuItemCompat;
-import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.view.MenuItemCompat;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+
 import com.delarocha.singularia.R;
+import com.delarocha.singularia.activities.ShopCartActivity;
 import com.delarocha.singularia.activities.TipoInvitaActivity;
 import com.delarocha.singularia.adapter.InvitacionAdapter;
 import com.delarocha.singularia.adapter.ProductoAdapter;
@@ -22,6 +27,8 @@ import com.delarocha.singularia.auxclasses.ShopItem;
 import com.delarocha.singularia.auxclasses.Tools;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
@@ -35,8 +42,15 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
+//import android.support.annotation.NonNull;
+//import android.support.v4.view.MenuItemCompat;
+//import android.support.v7.app.AppCompatActivity;
+//import android.support.v7.widget.GridLayoutManager;
+//import android.support.v7.widget.LinearLayoutManager;
+//import android.support.v7.widget.RecyclerView;
+
 public class InvitaBabyShower extends AppCompatActivity {
-    String email, psw, itemCount;
+    String email, psw,username,img_str, itemCount, uid, resSeguridad, pregSeguridad;
     RecyclerView recyclerInvitaBShower;
     InvitacionAdapter mInvitacionAdapter;
     private TextView barTextCount;
@@ -44,17 +58,22 @@ public class InvitaBabyShower extends AppCompatActivity {
     private DocumentReference docRef;
     private CollectionReference collRef;
     private FirebaseFirestore mFireStoreDB;
-    private List<Invitacion> mListaInvitaciones;
+    private FirebaseAuth mAuth;
+    private FirebaseUser mUser;
+    private List<Invitacion> mListaInvitaciones, mInvitasSelectedList;
     private List<String> mListaModelos;
     private List<ShopItem> shopItemsList;
     public List<Map<String, Object>> mapList = new ArrayList<>();
+    public List<Map<String, Object>> mapListSelected = new ArrayList<>();
     private Invitacion invitacion;
     private int mItemSelected;
     ProductoAdapter.CustomItemClickListener itemCountCallBack;
     Tools mTools;
+    private Context context = this;
 
     int i = 0;
     String TAG = "INVITABBSHOWER";
+    private ImageView imgIconShopCart;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -66,10 +85,16 @@ public class InvitaBabyShower extends AppCompatActivity {
         Bundle extras = getIntent().getExtras();
         email = extras.getString("email");
         psw = extras.getString("psw");
+        username = extras.getString("nombre");
+        img_str = extras.getString("img_str");
+
         recyclerInvitaBShower = (RecyclerView) findViewById(R.id.recyclerInvitaBShower);
         mFireStoreDB = FirebaseFirestore.getInstance();
+        mAuth = FirebaseAuth.getInstance();
+        mUser = mAuth.getCurrentUser();
+        uid = mUser.getUid();
         //itemCount = String.valueOf(mTools.getIntPreference(Tools.ITEMCOUNT_KEYNAME));
-        getSelectedItems(new InvitaBoda.myCallback() {
+        getSelectedItems(new InvitaBabyShower.MyCallback() {
             @Override
             public void onGetSizeList(int selectedSize) {
                 mItemSelected = selectedSize;
@@ -79,26 +104,34 @@ public class InvitaBabyShower extends AppCompatActivity {
             public void onGetSelectedList(List<ShopItem> list) {
                 shopItemsList = list;
             }
+
+            @Override
+            public void onGetSelectedInvitas(List<Invitacion> list) {
+                mInvitasSelectedList = list;
+            }
         });
         getInvitaciones();
     }
 
-    private void getSelectedItems(final InvitaBoda.myCallback callback) {
+    private void getSelectedItems(final InvitaBabyShower.MyCallback callback) {
 
         final List<Invitacion> SelectedList = new ArrayList<>();
         final List<ShopItem> ShopItemList = new ArrayList<>();
-        final List<Map<String,Object>> mapListSelected = new ArrayList<>();
-
-        try{
+        //final List<Map<String,Object>> mapListSelected = new ArrayList<>();
+       // try{
             mFireStoreDB.collection(Tools.FIRESTORE_SHOPSESSION_COLLECTION)
                     .get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                 @Override
                 public void onComplete(@NonNull Task<QuerySnapshot> task) {
                     if (task.isSuccessful()) {
                         //barTextCount.setText(String.valueOf(task.getResult().size()));
+                        //uid = mAuth.getUid();
                         for (QueryDocumentSnapshot document : task.getResult()){
                             //Log.d(TAG, document.getId() + " => " + document.getData());
-                            mapListSelected.add(document.getData());
+                            if(document.getId().contains(uid)){
+                                mapListSelected.add(document.getData());
+                            }
+                            //mapListSelected.add(document.getData());
                         }
                         for(Map<String, Object> map: mapListSelected){
                             boolean oferta = false;
@@ -114,6 +147,7 @@ public class InvitaBabyShower extends AppCompatActivity {
                             ShopItem item
                                     = new ShopItem
                                     (
+
                                             String.valueOf(map.get("nombreUsuario")),
                                             String.valueOf(map.get("emailUsuario")),
                                             String.valueOf(map.get("fecha")),
@@ -127,7 +161,7 @@ public class InvitaBabyShower extends AppCompatActivity {
                                             String.valueOf(map.get("precioPdto")),
                                             oferta,onShopCar
                                     );
-                            /*
+
                             Invitacion invitacion
                                     = new Invitacion
                                     (
@@ -138,23 +172,30 @@ public class InvitaBabyShower extends AppCompatActivity {
                                             String.valueOf(map.get("cantidad")),
                                             String.valueOf(map.get("precio")),
                                             String.valueOf(map.get("comentario")),
-                                            oferta
+                                            oferta,onShopCar
                                     );
-                            */
-                            ShopItemList.add(item);
-                            SelectedList.add(invitacion);
+
+                            if(item.getTipoPdto().equals("0")){//ShopItem Invitacion Baby Shower
+                                ShopItemList.add(item);
+                            }
+                            if(invitacion.getTipoInvita().equals("0")){//Invitacion Baby Shower
+                                SelectedList.add(invitacion);
+                            }
+                            //ShopItemList.add(item);
+                            //SelectedList.add(invitacion);
                         }
                         callback.onGetSizeList(ShopItemList.size());
                         callback.onGetSelectedList(ShopItemList);
+                        callback.onGetSelectedInvitas(SelectedList);
                         //InitialSetUp();
                     } else {
                         Log.d(TAG, "Error getting documents: ", task.getException());
                     }
                 }
             });
-        }catch (Exception e){
-            e.printStackTrace();
-        }
+//        }catch (Exception e){
+//            e.printStackTrace();
+//        }
     }
 
     public void getInvitaciones(){
@@ -229,9 +270,9 @@ public class InvitaBabyShower extends AppCompatActivity {
 
 
             if(mItemSelected!=0){
-                mInvitacionAdapter = new InvitacionAdapter(this,"2",mListaModelos,data,shopItemsList,itemCountCallBack);
+                mInvitacionAdapter = new InvitacionAdapter(this,"0",mListaModelos,data,shopItemsList,itemCountCallBack);
             }else {
-                mInvitacionAdapter = new InvitacionAdapter(this,"2",mListaModelos,data,itemCountCallBack);
+                mInvitacionAdapter = new InvitacionAdapter(this,"0",mListaModelos,data,itemCountCallBack);
             }
 
             //mInvitacionAdapter = new InvitacionAdapter(this,"2",mListaModelos,data,itemCountCallBack);
@@ -254,6 +295,7 @@ public class InvitaBabyShower extends AppCompatActivity {
         MenuItemCompat.setActionView(menuItem,R.layout.shop_cart_count);
         RelativeLayout rl = (RelativeLayout)MenuItemCompat.getActionView(menuItem);
         barTextCount = (TextView)rl.findViewById(R.id.count_textview);
+        imgIconShopCart = rl.findViewById(R.id.imgIconShopCart);
         //barTextCount.setText(itemCount);
         mFireStoreDB.collection(Tools.FIRESTORE_SHOPSESSION_COLLECTION)
                 .addSnapshotListener(new EventListener<QuerySnapshot>() {
@@ -262,13 +304,39 @@ public class InvitaBabyShower extends AppCompatActivity {
                         if(e!=null){
                             return;
                         }
-
                         if(queryDocumentSnapshots!=null){
-                            List<DocumentSnapshot> docSnapshotList = queryDocumentSnapshots.getDocuments();
-                            barTextCount.setText(String.valueOf(docSnapshotList.size()));
+                            List<DocumentSnapshot> docSnapshotList = new ArrayList<>();
+                            List<DocumentSnapshot> docSnapshotListFiltered = new ArrayList<>();
+                            docSnapshotList = queryDocumentSnapshots.getDocuments();
+                            for(int i = 0; i<docSnapshotList.size();i++){
+                                if(docSnapshotList.get(i).getId().contains(uid)){
+                                    docSnapshotListFiltered.add(docSnapshotList.get(i));
+                                    barTextCount.setText(String.valueOf(docSnapshotListFiltered.size()));
+                                }
+                            }
                         }
                     }
                 });
+        imgIconShopCart.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                startActivity(new Intent(context, ShopCartActivity.class)
+                        .putExtra("email",email)
+                        .putExtra("psw",psw)
+                        .putExtra("nombre",username)
+                        .putExtra("resSeguridad",resSeguridad)
+                        .putExtra("pregSeguridad",pregSeguridad)
+                        .putExtra("fromInicio", false)
+                        .putExtra("activityFrom",InvitaBabyShower.class)
+                );
+            }
+        });
+        barTextCount.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+            }
+        });
         return super.onCreateOptionsMenu(menu);
     }
 
@@ -279,7 +347,10 @@ public class InvitaBabyShower extends AppCompatActivity {
             case android.R.id.home:
                 startActivity(new Intent(this, TipoInvitaActivity.class)
                         .putExtra("email", email)
-                        .putExtra("psw", psw));
+                        .putExtra("psw", psw)
+                        .putExtra("nombre",username)
+                        .putExtra("img_str",img_str)
+                );
                 break;
                 case R.id.cart_toolbar:
                     //Launch shop cart Activity
@@ -294,10 +365,12 @@ public class InvitaBabyShower extends AppCompatActivity {
     @Override
     protected void onStart() {
         super.onStart();
+        //uid = mAuth.getUid();
     }
 
     public interface MyCallback{
         void onGetSelectedList(List<ShopItem> list);
         void onGetSizeList(int selectedSize);
+        void onGetSelectedInvitas(List<Invitacion> list);
     }
 }

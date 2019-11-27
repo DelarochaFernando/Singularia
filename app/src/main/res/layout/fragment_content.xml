@@ -3,20 +3,23 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#fff"
+
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:background="#f3f3f3"
     tools:context="com.delarocha.singularia.auxclasses.ContentFragment">
-    <!--tools:context="com.alimuzaffar.loopingviewpagerdemo.ContentFragment"-->
+    <!--tools:context="com.alimuzaffar.loopingviewpagerdemo.ContentFragment"
+    android:layout_marginTop="85dp"
+    -->
 
     <!-- TODO: Update blank fragment layout -->
-    <RelativeLayout
+    <!--<RelativeLayout
         android:layout_height="wrap_content"
         android:layout_width="match_parent">
         <ImageView
             android:id="@+id/img_promo"
-            android:layout_marginTop="100dp"
             android:layout_centerHorizontal="true"
-            android:layout_width="400dp"
-            android:layout_height="400dp"
+            android:layout_width="450dp"
+            android:layout_height="430dp"
             android:scaleType="fitXY"/>
         <TextView
             android:id="@+id/text"
@@ -29,5 +32,42 @@
             android:layout_height="wrap_content"
             android:textSize="20dp"
             android:text="" />
-    </RelativeLayout>
+    </RelativeLayout>-->
+
+    <androidx.cardview.widget.CardView
+        android:layout_width="333dp"
+        android:layout_height="155dp"
+        android:layout_gravity="center"
+        app:cardCornerRadius="4dp"
+        app:cardElevation="4dp">
+        <LinearLayout
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <!--
+            android:layout_width="330dp"
+            android:layout_height="190dp"
+            android:layout_margin="15dp"-->
+            <!--<TextView
+                android:id="@+id/text"
+                android:layout_gravity="center"
+                android:gravity="center"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="0.1"
+                android:text="Especial juguetes\nregalarle el juguete esperado, te llega." />-->
+
+            <ImageView
+                android:id="@+id/img_promo"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:scaleType="centerCrop"/>
+            <!--android:layout_centerHorizontal="true"
+            android:layout_weight="0.5"
+            -->
+
+        </LinearLayout>
+    </androidx.cardview.widget.CardView>
+
 </FrameLayout>

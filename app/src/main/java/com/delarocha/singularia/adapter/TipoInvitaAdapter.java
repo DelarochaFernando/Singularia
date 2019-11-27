@@ -3,13 +3,15 @@ package com.delarocha.singularia.adapter;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.v7.widget.RecyclerView;
+//import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.RequestOptions;
 import com.delarocha.singularia.R;
 import com.delarocha.singularia.activities.invita.InvitaBabyShower;
 import com.delarocha.singularia.activities.invita.InvitaBautizo;
@@ -23,6 +25,7 @@ import com.delarocha.singularia.auxclasses.TipoInvitaCard;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
+import androidx.recyclerview.widget.RecyclerView;
 
 public class TipoInvitaAdapter extends RecyclerView.Adapter<TipoInvitaAdapter.TipoInvitaVH> {
 
@@ -52,7 +55,10 @@ public class TipoInvitaAdapter extends RecyclerView.Adapter<TipoInvitaAdapter.Ti
     @Override
     public void onBindViewHolder(TipoInvitaVH holder, final int position) {
         invitaCard = ArrayListInvitaciones.get(position);
-        Picasso.with(ctx).load(invitaCard.getUrl()).fit().into(holder.imgVCard);
+        //Picasso.with(ctx).load(invitaCard.getUrl()).fit().into(holder.imgVCard);
+        Glide.with(ctx).load(invitaCard.getUrl()).apply(new RequestOptions().centerCrop()).into(holder.imgVCard);
+        //Picasso.with(ctx).load(invitaCard.getUrl()).resize(48,48)
+                //.into(holder.imgVCard);
         //holder.imgVCard.setBackgroundResource(invitaCard.getImageSource());
         String titulo = invitaCard.getTitulo();
 
@@ -70,7 +76,10 @@ public class TipoInvitaAdapter extends RecyclerView.Adapter<TipoInvitaAdapter.Ti
                 public void onClick(View view) {
                     ctx.startActivity(new Intent(ctx,classArray[position])
                     .putExtra("email",extras.getString("email"))
-                    .putExtra("psw",extras.getString("psw")));
+                    .putExtra("psw",extras.getString("psw"))
+                    .putExtra("nombre", extras.getString("nombre"))
+                    //.putExtra("img_str", extras.getString("img_str"))
+                    );
                 }
             });
 

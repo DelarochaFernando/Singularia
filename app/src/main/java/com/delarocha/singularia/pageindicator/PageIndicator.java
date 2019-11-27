@@ -1,6 +1,7 @@
 package com.delarocha.singularia.pageindicator;
 
-import android.support.v4.view.ViewPager;
+//import android.support.v4.view.ViewPager;
+import androidx.viewpager.widget.ViewPager;
 
 /**
  * Created by jmata on 04/10/2018.

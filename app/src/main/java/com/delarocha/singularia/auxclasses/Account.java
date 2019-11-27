@@ -3,11 +3,13 @@ package com.delarocha.singularia.auxclasses;
 public class Account {
 
     String nombre;
-    //String lastname;
-    //String surname;
     String email;
     String img_string;
+    String img_storage_path;
     String password;
+    String pregSeguridad;
+    String resSeguridad;
+    boolean underReset;
 
     public String getNombre() {
         return nombre;
@@ -16,22 +18,6 @@ public class Account {
     public void setNombre(String nombre) {
         this.nombre = nombre;
     }
-
-    /*public String getLastname() {
-        return lastname;
-    }*/
-
-    /*public void setLastname(String lastname) {
-        this.lastname = lastname;
-    }
-
-    public String getSurname() {
-        return surname;
-    }
-
-    public void setSurname(String surname) {
-        this.surname = surname;
-    }*/
 
     public String getEmail() {
         return email;
@@ -49,6 +35,14 @@ public class Account {
         this.img_string = img_string;
     }
 
+    public String getImg_storage_path() {
+        return img_storage_path;
+    }
+
+    public void setImg_storage_path(String img_storage_path) {
+        this.img_storage_path = img_storage_path;
+    }
+
     public String getPassword() {
         return password;
     }
@@ -57,20 +51,49 @@ public class Account {
         this.password = password;
     }
 
-    public Account(String nombre, String lastname, String surname, String email, String img_string, String password) {
+    public String getPregSeguridad() {
+        return pregSeguridad;
+    }
+
+    public void setPregSeguridad(String pregSeguridad) {
+        this.pregSeguridad = pregSeguridad;
+    }
+
+    public String getResSeguridad() {
+        return resSeguridad;
+    }
+
+    public void setResSeguridad(String resSeguridad) {
+        this.resSeguridad = resSeguridad;
+    }
+
+    public boolean isUnderReset() {
+        return underReset;
+    }
+
+    public void setUnderReset(boolean underReset) {
+        this.underReset = underReset;
+    }
+
+    public Account(String nombre, String email, String img_string,String img_storage_path, String password,String pregSeguridad, String resSeguridad, boolean underReset) {
         this.nombre = nombre;
-        //this.lastname = lastname;
-        //this.surname = surname;
         this.email = email;
         this.img_string = img_string;
+        this.img_storage_path = img_storage_path;
         this.password = password;
+        this.pregSeguridad = pregSeguridad;
+        this.resSeguridad = resSeguridad;
+        this.underReset = underReset;
     }
 
     public Account() {
         this.nombre = "";
-        //this.lastname = "";
-        //this.surname = "";
         this.email = "";
         this.img_string = "";
+        this.img_storage_path = "";
+        this.password = "";
+        this.pregSeguridad = "";
+        this.resSeguridad = "";
+        this.underReset = false;
     }
 }

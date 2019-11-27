@@ -2,9 +2,9 @@ package com.delarocha.singularia.auxclasses;
 
 public class TipoInvitaCard {
 
-    private String titulo;
-    private int imageSource;
-    private String url;
+    String titulo;
+    int imageSource;
+    String url;
 
     public TipoInvitaCard(){
 

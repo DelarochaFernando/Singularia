@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".activities.ImageGalleryActivity">
+
+    <LinearLayout
+        android:id="@+id/linearDownloadingImages"
+        android:layout_centerInParent="true"
+        android:visibility="visible"
+        android:orientation="vertical"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content">
+        <ImageView android:id="@+id/imgNoImages"
+            android:layout_gravity="center"
+            android:layout_width="150dp"
+            android:layout_height="150dp"
+            android:scaleType="fitXY"
+            android:src="@drawable/ic_img_placeholder_accent"
+            android:visibility="gone"/>
+        <TextView
+            android:id="@+id/txtNoImages"
+            android:layout_gravity="center"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:visibility="gone"
+            android:textSize="20sp"
+            android:text="No hay Imágenes"/>
+        <TextView
+            android:id="@+id/txtDownImages"
+            android:layout_gravity="center"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="20sp"
+            android:text="Descargando Imágenes..."/>
+        <androidx.core.widget.ContentLoadingProgressBar
+            android:layout_below="@+id/txtDownImages"
+            android:id="@+id/loadingProgressBar"
+            android:layout_width="220dp"
+            android:layout_height="8dp"
+            style="@style/Widget.AppCompat.ProgressBar.Horizontal"
+            android:indeterminate="true"/>
+    </LinearLayout>
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/recyclerGallery"
+        android:visibility="gone"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="8dp"/>
+</RelativeLayout>

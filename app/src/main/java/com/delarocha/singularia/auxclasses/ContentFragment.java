@@ -2,9 +2,6 @@ package com.delarocha.singularia.auxclasses;
 
 import android.content.Context;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
-import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -12,20 +9,27 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.fragment.app.Fragment;
+
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.RequestOptions;
 import com.delarocha.singularia.R;
 import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.DocumentReference;
-import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
-import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+
+//import android.support.annotation.NonNull;
+//import android.support.annotation.Nullable;
+//import android.support.v4.app.Fragment;
 
 /**
  * Created by jmata on 04/10/2018.
@@ -38,7 +42,7 @@ public class ContentFragment extends Fragment {
 
     private static final String TAG = "ContentFragment";
     private static final String ARG_imgList = "img_list";
-    private String mParam1;
+    private String imgStr,textoProm;
     private static Context ctx;
     private DocumentReference dRef;
     public List<Map<String,Object>> mapList;
@@ -54,19 +58,21 @@ public class ContentFragment extends Fragment {
         imageIdList = new ArrayList<>();
         imageURLList = new ArrayList<>();
         this.firestoreDb = FirebaseFirestore.getInstance();
-        getImagenesPromo();
-        imageIdList.add(R.drawable.promo1);
-        imageIdList.add(R.drawable.promo2);
-        imageIdList.add(R.drawable.promo3);
-        imageIdList.add(R.drawable.promo4);
-        imageIdList.add(R.drawable.promo5);
+        //getImagenesPromo();
+        //imageIdList.add(R.drawable.promo1);
+        //imageIdList.add(R.drawable.promo2);
+        //imageIdList.add(R.drawable.promo3);
+        //imageIdList.add(R.drawable.promo4);
+        //imageIdList.add(R.drawable.promo5);
         //imageIdList.add(R.drawable.photo_demo_five);
         //imageIdList.add(R.drawable.photo_demo_six);
     }
 
     public String getParam1(){
-        return mParam1;
+        //return mParam1;
+        return "";
     }
+
     public void getImagenesPromo(){
         mapList = new ArrayList<>();
         /*
@@ -129,16 +135,16 @@ public class ContentFragment extends Fragment {
         return fragment;
     }*/
 
-    public static ContentFragment newInstance(Context context, String param1, int indice){
+    public static ContentFragment newInstance(Context context, String imgStr,String textoProm, int indice){
 
         ContentFragment fragment = new ContentFragment();
         Bundle args = new Bundle();
-        args.putString(ARG_PARAM1,param1);
+        args.putString("img_str",imgStr);
+        args.putString("texto",textoProm);
         args.putInt(ARG_FRAG_INDEX, indice);
         ctx = context;
         //args.putIntegerArrayList(ARG_imgList, (ArrayList<Integer>) imgResourceList);
         fragment.setArguments(args);
-
         return fragment;
     }
 
@@ -147,7 +153,8 @@ public class ContentFragment extends Fragment {
         super.onCreate(savedInstanceState);
         //i++;
         if(getArguments()!=null){
-            mParam1 = getArguments().getString(ARG_PARAM1);
+            imgStr = getArguments().getString("img_str");
+            textoProm = getArguments().getString("texto");
             fragIndex = getArguments().getInt(ARG_FRAG_INDEX);
             //imgIndex.add(i);
             //imageIdList = getArguments().getIntegerArrayList(ARG_imgList);
@@ -165,24 +172,23 @@ public class ContentFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         //return super.onCreateView(inflater, container, savedInstanceState);
         View view = inflater.inflate(R.layout.fragment_content, container, false);
-        TextView text = (TextView) view.findViewById(R.id.text);
+        //TextView text = (TextView) view.findViewById(R.id.text);
         ImageView img = (ImageView)view.findViewById(R.id.img_promo);
-        //Picasso.with(ctx).load(imageURLList.get(fragIndex)).fit().into(img);
-        //getImagenesPromo();
 
-        if(imageURLList.size()!=0){
-            Picasso.with(ctx).load(imageURLList.get(fragIndex)).fit().into(img);
-        }else{
-            img.setImageResource(imageIdList.get(fragIndex));
-        }
+        //if(imageURLList.size()!=0){
+            Glide.with(ctx).load(imgStr).apply(new RequestOptions().centerCrop()).into(img);
+            //Picasso.with(ctx).load(imgStr).fit().into(img);
+        //}else{
+            //img.setImageResource(imageIdList.get(fragIndex));
+        //}
 
 
         /*for(int drawable: imageIdList){
             img.setImageResource(drawable);
         }*/
         //img.setImageResource(imageIdList.get(fragIndex));
-        text.setTextColor(getResources().getColor(R.color.colorPrimaryDark));
-        text.setText(mParam1);
+        //text.setTextColor(getResources().getColor(R.color.colorPrimaryDark));
+        //text.setText(textoProm);
         return view;
     }
 

@@ -5,27 +5,36 @@ package com.delarocha.singularia.pageindicator;
  */
 import android.content.Context;
 import android.content.res.Resources;
-import android.support.annotation.DimenRes;
-import android.support.annotation.DrawableRes;
-import android.support.annotation.NonNull;
-import android.support.v4.view.ViewPager;
+//import android.support.annotation.DimenRes;
+//import android.support.annotation.DrawableRes;
+//import android.support.annotation.NonNull;
+//import android.support.v4.view.ViewPager;
+import android.util.Log;
+import android.view.Gravity;
 import android.view.View;
 import android.widget.LinearLayout;
 
-public class MyPageIndicator implements ViewPager.OnPageChangeListener {
+import androidx.annotation.DimenRes;
+import androidx.annotation.DrawableRes;
+import androidx.annotation.NonNull;
+import androidx.viewpager.widget.ViewPager;
+
+//public class MyPageIndicator implements ViewPager.OnPageChangeListener {
+public class MyPageIndicator{
     private Context mContext;
     private LinearLayout mContainer;
     private int mDrawable;
     private int mSpacing;
     private int mSize;
     private ViewPager mViewPager;
+    private ViewPager.OnPageChangeListener onPageChangeListener;
     private int mPageCount;
     private int mInitialPage = 0;
 
-    private int defaultSizeInDp = 12;
+    private int defaultSizeInDp = 10;
     private int defaultSpacingInDp = 12;
 
-    public MyPageIndicator(@NonNull Context context, @NonNull LinearLayout containerView, @NonNull ViewPager viewPager, @DrawableRes int drawableRes) {
+    public MyPageIndicator(@NonNull Context context, @NonNull LinearLayout containerView, @NonNull ViewPager viewPager, @DrawableRes int drawableRes, @NonNull ViewPager.OnPageChangeListener onPageListener) {
         if (context == null) {
             throw new IllegalArgumentException("context cannot be null");
         } else if (containerView == null) {
@@ -39,6 +48,7 @@ public class MyPageIndicator implements ViewPager.OnPageChangeListener {
         mContainer = containerView;
         mDrawable = drawableRes;
         mViewPager = viewPager;
+        onPageChangeListener = onPageListener;
 
 
     }
@@ -73,7 +83,8 @@ public class MyPageIndicator implements ViewPager.OnPageChangeListener {
             return;
         }
 
-        mViewPager.addOnPageChangeListener(this);
+        //mViewPager.addOnPageChangeListener(this);
+        mViewPager.addOnPageChangeListener(onPageChangeListener);
         Resources res = mContext.getResources();
         mContainer.removeAllViews();
         for (int i = 0; i < mPageCount; i++) {
@@ -85,11 +96,13 @@ public class MyPageIndicator implements ViewPager.OnPageChangeListener {
             view.setLayoutParams(lp);
             view.setBackgroundResource(mDrawable);
             view.setSelected(i == 0);
+            mContainer.setGravity(Gravity.CENTER);
+
             mContainer.addView(view);
         }
     }
 
-    private void setIndicatorAsSelected(int index) {
+    public void setIndicatorAsSelected(int index) {
         if (mContainer == null) {
             return;
         }
@@ -99,27 +112,34 @@ public class MyPageIndicator implements ViewPager.OnPageChangeListener {
         }
     }
 
-    @Override
-    public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
-        int a = 0;
-        if(a!=0){
-            String b = "";
-        }
-    }
+//    @Override
+//    public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+//
+//        float tempPositionOffset = 0;
+//
+//        if (position == 0) {
+//            if (tempPositionOffset < positionOffset) {
+//                Log.d("eric", "scrolling left ...");
+//            } else {
+//                Log.d("eric", "scrolling right ...");
+//            }
+//
+//            tempPositionOffset = positionOffset;
+//
+//            Log.d("eric", "position " + position + "; " + " positionOffset " + positionOffset + "; " + " positionOffsetPixels " + positionOffsetPixels + ";");
+//        }
+//    }
 
-    @Override
-    public void onPageSelected(int position) {
-        int index = position % mPageCount;
-        setIndicatorAsSelected(index);
-    }
+//    @Override
+//    public void onPageSelected(int position) {
+//        int index = position % mPageCount;
+//        setIndicatorAsSelected(index);
+//    }
 
-    @Override
-    public void onPageScrollStateChanged(int state) {
-        int a = 0;
-        if(a!=0){
-            String b = "";
-        }
-    }
+//    @Override
+//    public void onPageScrollStateChanged(int state) {
+//
+//    }
 
     public void cleanup() {
         mViewPager.clearOnPageChangeListeners();

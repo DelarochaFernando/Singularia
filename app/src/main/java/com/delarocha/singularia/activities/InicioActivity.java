@@ -7,40 +7,57 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.os.Handler;
-import android.support.annotation.NonNull;
-import android.support.design.widget.NavigationView;
-import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentStatePagerAdapter;
-import android.support.v4.view.GravityCompat;
-import android.support.v4.view.ViewPager;
-import android.support.v4.widget.DrawerLayout;
-import android.support.v7.app.ActionBarDrawerToggle;
-import android.support.v7.app.AlertDialog;
-import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.Toolbar;
 import android.util.Base64;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.ActionBarDrawerToggle;
+import androidx.appcompat.app.AlertDialog;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
+import androidx.core.view.GravityCompat;
+import androidx.core.view.MenuItemCompat;
+import androidx.drawerlayout.widget.DrawerLayout;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentStatePagerAdapter;
+import androidx.recyclerview.widget.RecyclerView;
+import androidx.viewpager.widget.ViewPager;
+
+import com.bumptech.glide.Glide;
 import com.delarocha.singularia.R;
 import com.delarocha.singularia.auxclasses.Account;
 import com.delarocha.singularia.auxclasses.ContentFragment;
 import com.delarocha.singularia.auxclasses.Tools;
 import com.delarocha.singularia.auxclasses.ViewPagerCustomScrollSpeed;
+import com.delarocha.singularia.camera.SingulariaCam;
 import com.delarocha.singularia.pageindicator.LoopingPagerAdapter;
 import com.delarocha.singularia.pageindicator.MyPageIndicator;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
+import com.google.android.material.navigation.NavigationView;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.FirebaseFirestoreException;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
+import com.google.firebase.firestore.QuerySnapshot;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Timer;
@@ -48,30 +65,60 @@ import java.util.TimerTask;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
-public class InicioActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
+//import androidx.viewpager2.adapter.FragmentStateAdapter;
+//import androidx.viewpager2.widget.ViewPager2;
+
+//import android.support.annotation.NonNull;
+//import android.support.design.widget.NavigationView;
+//import android.support.v4.app.Fragment;
+//import android.support.v4.app.FragmentManager;
+//import android.support.v4.app.FragmentStatePagerAdapter;
+//import android.support.v4.view.GravityCompat;
+//import android.support.v4.view.MenuItemCompat;
+//import android.support.v4.view.ViewPager;
+//import android.support.v4.widget.DrawerLayout;
+//import android.support.v7.app.ActionBarDrawerToggle;
+//import android.support.v7.app.AlertDialog;
+//import android.support.v7.app.AppCompatActivity;
+//import android.support.v7.widget.Toolbar;
+
+public class InicioActivity extends AppCompatActivity implements
+        NavigationView.OnNavigationItemSelectedListener, Serializable {
 
     //private static final String FIRESTORE_ACCOUNTS_COLLECTION = "accounts";
     private Context context = this;
-    private String email, psw;
+    private String email, psw, username, avatar_img_str,avatar_storage_path,pregSeg, resSeguridad, uid;
     private FirebaseFirestore DBfirebase;
+    private String TAG = "InicioActivity";
     private DocumentReference dRef;
+    private CollectionReference collRef;
+    private FirebaseAuth mAuth;
+    private FirebaseUser mUser;
     private Account account;
-    private NavigationView navigationView;
+    private NavigationView navigationView, nav_footer;
     private DrawerLayout drawer;
     //private FloatingActionButton fab;
     private CircleImageView imageUser;
+    private ImageView btnConfig;
     private TextView textUserName, textUserEmail;
     //private ViewPager container,view_pager;
     private ViewPagerCustomScrollSpeed view_pager;
+    private RecyclerView recyclerPromos;
+    //private ViewPager2 view_pager2;
     private LinearLayout pagesIndicator;
     private PromosPagerAdapter promosPagerAdapter;
+    private ViewPager.OnPageChangeListener onPageChangeListener;
     private MyPageIndicator myIndicator;
     private Toolbar toolbar;
     private List<Fragment> fragmentList;
-    private Handler handler;
+    public Handler handler;
     private Runnable update;
     private Tools mTools;
     private int itemCount = 0;
+    private TextView barTextCount;
+    private ImageView imgIconShopCart;
+    private View content_inicio, content_tipoInvita;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -85,37 +132,67 @@ public class InicioActivity extends AppCompatActivity implements NavigationView.
         mTools = new Tools(context);
         email = extras.getString("email");
         psw = extras.getString("psw");
+        username = extras.getString("nombre");
+        pregSeg = extras.getString("pregSeguridad");
+        resSeguridad = extras.getString("resSeguridad");
 
         itemCount = mTools.getIntPreference(Tools.ITEMCOUNT_KEYNAME);
+        mTools.setStringPreference(Tools.SWIPE_DIRECTION,"");//reset swipe direcion variable
+        mTools.setIntPreference(Tools.COUNT_MOVES,0);//reset moves variable
         if(itemCount==-1||itemCount==0){
             mTools.setIntPreference(Tools.ITEMCOUNT_KEYNAME,0);
         }
 
         DBfirebase = FirebaseFirestore.getInstance();
+        mAuth = FirebaseAuth.getInstance();
+        mUser = mAuth.getCurrentUser();
+        uid = mUser.getUid();
         account = new Account();
 
         fragmentList = new ArrayList<>();
-        //fab = (FloatingActionButton) findViewById(R.id.fab);
+
         drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
-        //container = (ViewPager)findViewById(R.id.container);
-        //view_pager = (ViewPager)findViewById(R.id.view_pager);
+        //recyclerPromos = findViewById(R.id.recyclerPromos);
+
         view_pager = (ViewPagerCustomScrollSpeed)findViewById(R.id.view_pager);
-        pagesIndicator = (LinearLayout)findViewById(R.id.pagesIndicator);
+        //pagesIndicator = (LinearLayout)findViewById(R.id.pagesIndicator);
         navigationView = (NavigationView) findViewById(R.id.nav_view);
+        //nav_footer = findViewById(R.id.nav_footer);
+        MenuItem nav_home = navigationView.getMenu().findItem(R.id.nav_home);
+        MenuItem nav_invita = navigationView.getMenu().findItem(R.id.nav_invitaciones);
+        MenuItem nav_souvenir = navigationView.getMenu().findItem(R.id.nav_souvenirs);
+        nav_home.setVisible(false);
+        nav_invita.setVisible(true);
+        nav_souvenir.setVisible(true);
         navigationView.setNavigationItemSelectedListener(this);
-        /*fab.setOnClickListener(new View.OnClickListener() {
+        //nav_footer.setNavigationItemSelectedListener(this);
+        View headerView = navigationView.getHeaderView(0);
+        btnConfig = headerView.findViewById(R.id.btnConfiguration);
+
+
+        btnConfig.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
+                startActivity(new Intent(InicioActivity.this,AccountConfiguration.class)
+                .putExtra("email",email)
+                .putExtra("psw", psw)
+                .putExtra("nombre",username)
+                .putExtra(Tools.FROM_TIPOINVITA_TAG,false)
+                //.putExtra("img_str",avatar_img_str)
+                .putExtra("pregSeguridad",pregSeg)
+                .putExtra("resSeguridad",resSeguridad)
+                );
             }
-        });*/
+        });
+
+
 
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
                 this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
         drawer.setDrawerListener(toggle);
         toggle.syncState();
         getUsuario2(email,psw);
+        getPromosInicio();
         //textUserName.setText(account.getNombre()+" "+ account.getLastname());
         //textUserEmail.setText(account.getEmail());
         /*try{
@@ -126,50 +203,117 @@ public class InicioActivity extends AppCompatActivity implements NavigationView.
             e.printStackTrace();
         }*/
         //PageIndicatorView pageIndicatorView = (PageIndicatorView) findViewById(R.id.pageIndicatorView);
-        fragmentList.add(ContentFragment.newInstance(context,"Promoción 1",0));
-        fragmentList.add(ContentFragment.newInstance(context,"Promoción 2",1));
-        fragmentList.add(ContentFragment.newInstance(context,"Promoción 3",2));
-        fragmentList.add(ContentFragment.newInstance(context,"Promoción 4",3));
-        fragmentList.add(ContentFragment.newInstance(context,"Promoción 5",4));
+
+        //fragmentList.add(ContentFragment.newInstance(context,"Promoción 1",0));
+        //fragmentList.add(ContentFragment.newInstance(context,"Promoción 2",1));
+        //fragmentList.add(ContentFragment.newInstance(context,"Promoción 3",2));
+        //fragmentList.add(ContentFragment.newInstance(context,"Promoción 4",3));
+        //fragmentList.add(ContentFragment.newInstance(context,"Promoción 5",4));
         //fragmentList.add(ContentFragment.newInstance("Promoción 6",5));
         promosPagerAdapter = new PromosPagerAdapter(getSupportFragmentManager(), fragmentList);
-        view_pager.setAdapter(promosPagerAdapter);
-        view_pager.setScrollDuration(5000);
+        onPageChangeListener = new ViewPager.OnPageChangeListener() {
+            float tempPositionOffset = 0;
 
-        myIndicator = new MyPageIndicator(this, pagesIndicator, view_pager, R.drawable.indicator_circle);
-        myIndicator.setPageCount(fragmentList.size());
-        myIndicator.show();
-        setUpAutoScrolling();
+            @Override
+            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+                if (position == 0) {
+                    if (tempPositionOffset < positionOffset) {
+                        Log.d("eric", "scrolling left ...");
+                    } else {
+                        Log.d("eric", "scrolling right ...");
+                    }
+
+                    tempPositionOffset = positionOffset;
+
+                    Log.d("eric", "position " + position + "; " + " positionOffset " + positionOffset + "; " + " positionOffsetPixels " + positionOffsetPixels + ";");
+                }
+            }
+
+            @Override
+            public void onPageSelected(int position) {
+                int index = position % fragmentList.size();
+                Log.i("VIEWPAGER page selected"," "+String.valueOf(position));
+                Log.i("INDEX & CURRENTPAGE"," INDEX: "+String.valueOf(index)+"| CURRENTPAGE: "+String.valueOf(currentPage));
+                String movimiento = mTools.getStringPreference(Tools.SWIPE_DIRECTION);
+                //if(movimiento.equals("derecha")){ index = index - 1; }
+                //if(movimiento.equals("izquierda")){index = index +1;}
+                //myIndicator.setIndicatorAsSelected(index);
+                //index = position % fragmentList.size();
+
+            }
+
+            @Override
+            public void onPageScrollStateChanged(int state) {
+
+                switch (state){
+                    case ViewPager.SCROLL_STATE_IDLE:
+                        break;
+                    case ViewPager.SCROLL_STATE_DRAGGING:
+                        break;
+                    case ViewPager.SCROLL_STATE_SETTLING:
+                        break;
+                }
+
+            }
+        };
+        view_pager.setOnPageChangeListener(onPageChangeListener);
+        //view_pager.setAdapter(promosPagerAdapter);
+//        view_pager.setScrollDuration(5000);
+
+        view_pager.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Toast.makeText(context, "Haz lanzado actividad de esta promoción!!!", Toast.LENGTH_SHORT).show();
+            }
+        });
+
+//        myIndicator = new MyPageIndicator(this, pagesIndicator, view_pager, R.drawable.indicator_circle,onPageChangeListener);
+        //myIndicator = new MyPageIndicator(this, pagesIndicator, view_pager3, R.drawable.indicator_circle,onPageChangeListener);
+//        myIndicator.setPageCount(fragmentList.size());
+//        myIndicator.show();
+//        setUpAutoScrolling();
     }
 
     private void getUsuario2(String email, String psw){
         try{
+            byte[] decodedString = new byte[1];
+            Bitmap userBitmap = null;
             dRef = DBfirebase.collection(Tools.FIRESTORE_ACCOUNTS_COLLECTION).document(email+"-"+psw);
             dRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
                 @Override
                 public void onComplete(@NonNull Task<DocumentSnapshot> task) {
                     if(task.isSuccessful()){
                         //Account acc = new Account();
+                        avatar_img_str = "";
                         DocumentSnapshot snapshot = task.getResult();
                         account.setNombre(snapshot.get("nombre").toString());
                         account.setEmail(snapshot.get("email").toString());
                         account.setImg_string(snapshot.get("img_string").toString());
+                        account.setImg_storage_path(snapshot.get("img_storage_path").toString());
+                        avatar_img_str = account.getImg_string();
+                        avatar_storage_path = account.getImg_storage_path();
                         textUserName = (TextView)findViewById(R.id.textUserName);
                         imageUser = (CircleImageView)findViewById(R.id.imageUser);
                         textUserEmail = (TextView) findViewById(R.id.textUserEmail);
                         textUserName.setText(account.getNombre());
                         textUserEmail.setText(account.getEmail());
-                        byte[] decodedString = Base64.decode(account.getImg_string(), Base64.DEFAULT);
-                        Bitmap userBitmap = BitmapFactory.decodeByteArray(decodedString, 0, decodedString.length);
-                        imageUser.setImageBitmap(userBitmap);
+                        if(!avatar_storage_path.equals("")){
+                            //byte[] decodedString = Base64.decode(account.getImg_string(), Base64.DEFAULT);
+                            //Bitmap userBitmap = BitmapFactory.decodeByteArray(decodedString, 0, decodedString.length);
+                            Glide.with(context).load(avatar_storage_path).into(imageUser);
+                            //imageUser.setImageBitmap(userBitmap);
+                        }else{
+                            imageUser.setBackground(getResources().getDrawable(R.drawable.ic_default_user_white));
+                        }
                         mTools.setStringPreference("user",account.getNombre());
                         mTools.setStringPreference("email",account.getEmail());
+                        mTools.setStringPreference("img_str",account.getImg_string());
                     }
                 }
             }).addOnFailureListener(new OnFailureListener() {
                 @Override
                 public void onFailure(@NonNull Exception e) {
-
+                    e.printStackTrace();
                 }
             });
 
@@ -177,6 +321,34 @@ public class InicioActivity extends AppCompatActivity implements NavigationView.
             e.printStackTrace();
         }
     }
+
+    private void getPromosInicio(){
+
+        DBfirebase.collection(Tools.FIRESTORE_IMGS_COLLECTION).get()
+                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                  @Override
+                  public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                    if(task.isSuccessful()){
+                       for(int i = 0; i<task.getResult().getDocuments().size();i++){
+                           DocumentSnapshot docSnap = task.getResult().getDocuments().get(i);
+                           String imgstr = docSnap.getString("imgPromoString");
+                           String texto = docSnap.getString("textoPromo");
+                           fragmentList.add(ContentFragment.newInstance(context,imgstr,texto,i));
+                       }
+
+                        promosPagerAdapter = new PromosPagerAdapter(getSupportFragmentManager(), fragmentList);
+                        view_pager.setAdapter(promosPagerAdapter);
+                    }
+                  }
+                }).addOnFailureListener(new OnFailureListener() {
+                @Override
+                public void onFailure(@NonNull Exception e) {
+                    e.printStackTrace();
+                }
+            });
+
+    }
+
     private void getUsuario(String email, String psw) {
         try{
             dRef = DBfirebase.collection(Tools.FIRESTORE_ACCOUNTS_COLLECTION).document(email+"-"+psw);
@@ -228,8 +400,64 @@ public class InicioActivity extends AppCompatActivity implements NavigationView.
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.inicio, menu);
-        return true;
+        //getMenuInflater().inflate(R.menu.inicio, menu);
+        getMenuInflater().inflate(R.menu.toolbar_shopingcart_menu, menu);
+        MenuItem menuItem = menu.findItem(R.id.cart_toolbar);
+        MenuItemCompat.setActionView(menuItem,R.layout.shop_cart_count);
+        RelativeLayout rl = (RelativeLayout)MenuItemCompat.getActionView(menuItem);
+        barTextCount = (TextView)rl.findViewById(R.id.count_textview);
+        imgIconShopCart = rl.findViewById(R.id.imgIconShopCart);
+
+        DBfirebase.collection(Tools.FIRESTORE_SHOPSESSION_COLLECTION)
+                .addSnapshotListener(new EventListener<QuerySnapshot>() {
+                    @Override
+                    public void onEvent(QuerySnapshot queryDocumentSnapshots, FirebaseFirestoreException e) {
+                        if(e!=null){
+                            return;
+                        }
+                        if(queryDocumentSnapshots!=null){
+                            List<DocumentSnapshot> docSnapshotList = new ArrayList<>();
+                            List<DocumentSnapshot> docSnapshotListFiltered = new ArrayList<>();
+                            docSnapshotList = queryDocumentSnapshots.getDocuments();
+                            for(int i = 0; i<docSnapshotList.size();i++){
+                                if(docSnapshotList.get(i).getId().contains(uid)){
+                                    docSnapshotListFiltered.add(docSnapshotList.get(i));
+                                    barTextCount.setText(String.valueOf(docSnapshotListFiltered.size()));
+                                }
+                            }
+                        }
+                    }
+                });
+        imgIconShopCart.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                startActivity(new Intent(context,ShopCartActivity.class)
+                        .putExtra("email",email)
+                        .putExtra("psw",psw)
+                        .putExtra("nombre",username)
+                        .putExtra("resSeguridad",resSeguridad)
+                        .putExtra("pregSeguridad",pregSeg)
+                        .putExtra("fromInicio", true)
+                        .putExtra("activityFrom",InicioActivity.class)
+                );
+            }
+        });
+        barTextCount.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                startActivity(new Intent(context,ShopCartActivity.class)
+                        .putExtra("email",email)
+                        .putExtra("psw",psw)
+                        .putExtra("nombre",username)
+                        .putExtra("resSeguridad",resSeguridad)
+                        .putExtra("pregSeguridad",pregSeg)
+                        .putExtra("fromInicio", true)
+                        .putExtra("activityFrom",InicioActivity.class)
+                );
+            }
+        });
+        return super.onCreateOptionsMenu(menu);
+
     }
 
     @Override
@@ -258,27 +486,71 @@ public class InicioActivity extends AppCompatActivity implements NavigationView.
                 startActivity(new Intent(InicioActivity.this,TipoInvitaActivity.class)
                 .putExtra("email", email)
                 .putExtra("psw", psw)
+                .putExtra("nombre",username)
+                .putExtra("pregSeguridad",pregSeg)
+                .putExtra("resSeguridad",resSeguridad)
+                .putExtra("fromInicio",true)
+                //.putExtra("img_str",avatar_img_str)
                 );
                 break;
             case R.id.nav_pub_escrita:
-                Intent intent = new Intent(InicioActivity.this, PubEscritaActivity.class);
-                startActivity(intent);
+
+                startActivity(new Intent(InicioActivity.this, PubEscritaActivity.class)
+                                .putExtra("email", email)
+                                .putExtra("psw", psw)
+                                .putExtra("nombre",username)
+                                .putExtra("pregSeguridad",pregSeg)
+                                .putExtra("resSeguridad",resSeguridad)
+                                .putExtra("fromInicio",true)
+                        //.putExtra("img_str",img_str)
+                );
                 break;
-            case R.id.nav_playeras:
+            case R.id.nav_souvenirs:
                 //startActivity(new Intent(InicioActivity.this, PlayerasActivity.class));
+                startActivity(new Intent(InicioActivity.this, Souvenirs.class)
+                                .putExtra("email", email)
+                                .putExtra("psw", psw)
+                                .putExtra("nombre",username)
+                                .putExtra("pregSeguridad",pregSeg)
+                                .putExtra("resSeguridad",resSeguridad)
+                                .putExtra("fromInicio",true)
+                        //.putExtra("img_str",img_str)
+                );
                 break;
-            case R.id.nav_configuracion:
-                break;
+            //case R.id.nav_configuracion:
+                //break;
             case R.id.nav_camera:
+                startActivity(new Intent(InicioActivity.this, SingulariaCam.class)
+                        .putExtra("email", email)
+                        .putExtra("psw", psw)
+                        .putExtra("nombre",username)
+                        .putExtra("pregSeguridad",pregSeg)
+                        .putExtra("resSeguridad",resSeguridad)
+                        .putExtra("fromInicio",true)
+                        //.putExtra("img_str",img_str)
+                );
                 break;
             case R.id.nav_galeria:
+                startActivity(new Intent(InicioActivity.this, ImageGalleryActivity.class)
+                                .putExtra("email", email)
+                                .putExtra("psw", psw)
+                                .putExtra("nombre",username)
+                                .putExtra("pregSeguridad",pregSeg)
+                                .putExtra("resSeguridad",resSeguridad)
+                                .putExtra("fromInicio",true)
+                                //.putExtra("nombre",username)
+                        //.putExtra("img_str",img_str)
+                );
+                break;
+            case R.id.nav_regalos:
+
                 break;
 
-            case R.id.nav_share:
-                break;
-
-            case R.id.nav_send:
-                break;
+//            case R.id.nav_share:
+//                break;
+//
+//            case R.id.nav_send:
+//                break;
             case R.id.nav_exit:
                 showClosingDialog();
             }
@@ -286,6 +558,50 @@ public class InicioActivity extends AppCompatActivity implements NavigationView.
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;
+    }
+
+    private void resetInvitaOnShopCart(){
+        try{
+            DBfirebase.collection(Tools.FIRESTORE_INVITACIONES_COLLECTION)
+                    .get()
+                    .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                        @Override
+                        public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                            if (task.isSuccessful()) {
+                                for (QueryDocumentSnapshot document : task.getResult()) {
+                                    //Log.d(TAG, document.getId() + " => " + document.getData());
+                                    //mapList.add(document.getData());
+                                    //Map<String,Object> map = document.getData();
+                                    //map.
+                                    if(document.getData().containsKey("onShopCar")){
+
+                                        Task<Void> reference = document.getReference()
+                                                .update("onShopCar",false)
+                                                .addOnSuccessListener(new OnSuccessListener<Void>() {
+                                                    @Override
+                                                    public void onSuccess(Void aVoid) {
+                                                        Log.d(TAG, "TABLE: "+Tools.FIRESTORE_INVITACIONES_COLLECTION+" resetted.");
+                                                    }
+                                                }).addOnFailureListener(new OnFailureListener() {
+                                                    @Override
+                                                    public void onFailure(@NonNull Exception e) {
+                                                        Log.d(TAG, "TABLE: "+Tools.FIRESTORE_INVITACIONES_COLLECTION+" resetted.");
+                                                    }
+                                                });
+                                    }
+                                }
+                                //getSelectedItems();
+                                //InitialSetUp();
+                            } else {
+                                Log.d(TAG, "Error getting documents: ", task.getException());
+                            }
+                        }
+                    });
+
+        }catch (Exception e){
+
+        }
+
     }
 
     private void showClosingDialog() {
@@ -297,8 +613,15 @@ public class InicioActivity extends AppCompatActivity implements NavigationView.
                 .setPositiveButton("Aceptar", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
+                        resetInvitaOnShopCart();
                         FirebaseAuth.getInstance().signOut();
-                        startActivity(new Intent(context, LoginActivity.class));
+                        mTools.setBooleanPreference(Tools.USER_LOOGED_IN_STATUS_KEYNAME,false);
+                        mTools.setStringPreference(Tools.USER_LOGIN_EMAIL_KEYNAME,null);
+                        mTools.setStringPreference(Tools.USER_LOGIN_PSW_KEYNAME,null);
+                        startActivity(new Intent(context, LoginActivity.class)
+                        .putExtra("newPsw", false)
+                        );
+                        System.gc();
                         dialogInterface.dismiss();
                     }
                 }).setNegativeButton("Cancelar", new DialogInterface.OnClickListener() {
@@ -343,17 +666,40 @@ public class InicioActivity extends AppCompatActivity implements NavigationView.
     }*/
 
     int currentPage = 0;
-    private void setUpAutoScrolling(){
+    public void setUpAutoScrolling(){
         handler = new Handler();
         update = new Runnable() {
             @Override
             public void run() {
-                view_pager.setCurrentItem(currentPage,true);
-                if(currentPage == Integer.MAX_VALUE){
-                    currentPage = 0;
-                }else{
+                String movimiento = mTools.getStringPreference(Tools.SWIPE_DIRECTION);
+                if(movimiento.equals("")){
+                    view_pager.setCurrentItem(currentPage,true);
+                    if(currentPage == Integer.MAX_VALUE){
+                        currentPage = 0;
+                    //}else if(movimiento.equals("derecha")){
+                        //--currentPage;
+                        //view_pager.setCurrentItem(currentPage,true);
+                        //mTools.setStringPreference(Tools.SWIPE_DIRECTION,"");
+                    } else{
+                        ++currentPage;
+                    }
+                }else if(movimiento.equals("derecha")){
+                    --currentPage;
+                    //view_pager.setCurrentItem(currentPage,true);
+                    mTools.setStringPreference(Tools.SWIPE_DIRECTION,"");
+                }else if(movimiento.equals("izquierda")){
                     ++currentPage;
+                    mTools.setStringPreference(Tools.SWIPE_DIRECTION,"");
                 }
+                /*if(currentPage == Integer.MAX_VALUE){
+                    currentPage = 0;
+                }else if(movimiento.equals("derecha")){
+                    --currentPage;
+                    view_pager.setCurrentItem(currentPage,true);
+                    mTools.setStringPreference(Tools.SWIPE_DIRECTION,"");
+                } else{
+                    ++currentPage;
+                }*/
             }
         };
         Timer timer = new Timer();
@@ -362,8 +708,48 @@ public class InicioActivity extends AppCompatActivity implements NavigationView.
             public void run() {
                 handler.post(update);
             }
-        },4000,4000);
+        },2000,3500);
     }
+
+    /*private class PromosCardsAdapter extends RecyclerView.Adapter<PromosCardsAdapter.PromosVH>{
+
+        public PromosCardsAdapter(List<>){
+
+        }
+
+        @NonNull
+        @Override
+        public PromosCardsAdapter.PromosVH onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+            View v = getLayoutInflater().inflate(R.layout.promo_item,parent,false);
+            PromosVH promosvh = new PromosVH(v);
+            return promosvh;
+        }
+
+        @Override
+        public void onBindViewHolder(@NonNull PromosCardsAdapter.PromosVH holder, int position) {
+
+        }
+
+        @Override
+        public int getItemCount() {
+            return promosList.size();
+        }
+
+        class PromosVH extends RecyclerView.ViewHolder{
+
+            //String imgStr;
+            //String promTexto;
+            TextView txtProm;
+            CardView cardProm;
+            ImageView imgVProm;
+            public PromosVH(@NonNull View itemView) {
+                super(itemView);
+                txtProm = itemView.findViewById(R.id.txtProm);
+                cardProm = itemView.findViewById(R.id.cardProm);
+                imgVProm = itemView.findViewById(R.id.imgVProm);
+            }
+        }
+    }*/
 
     public class PromosPagerAdapter extends FragmentStatePagerAdapter implements LoopingPagerAdapter {
 
@@ -382,7 +768,6 @@ public class InicioActivity extends AppCompatActivity implements NavigationView.
             //return PlaceholderPromosFragment.newInstance(position + 1);
             int index = position%mFrags.size();
             return mFrags.get(index);
-
         }
 
         @Override

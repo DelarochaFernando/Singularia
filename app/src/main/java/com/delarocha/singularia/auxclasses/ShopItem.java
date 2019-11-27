@@ -6,6 +6,7 @@ package com.delarocha.singularia.auxclasses;
 
 public class ShopItem {
 
+    //private String uid;
     private String nombreUsuario;
     private String emailUsuario;
     private String fecha;
@@ -25,6 +26,7 @@ public class ShopItem {
     public ShopItem(String nombreUsuario, String emailUsuario, String fecha,String nombrePdto,
                     String imgPdto, String categoriaPdto, String tipoPdto, String modeloPdto,
                     String cantidadPdto, String comentario, String precioPdto, boolean tieneOferta, boolean onShopCar) {
+
         this.nombreUsuario = nombreUsuario;
         this.emailUsuario = emailUsuario;
         this.fecha = fecha;
@@ -39,6 +41,14 @@ public class ShopItem {
         this.tieneOferta = tieneOferta;
         this.onShopCar = onShopCar;
     }
+
+    //public String getUid() {
+        //return uid;
+    //}
+
+    //public void setUid(String uid) {
+        //this.uid = uid;
+    //}
 
     public String getNombreUsuario() {
         return nombreUsuario;

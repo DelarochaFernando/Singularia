@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".camera.SingulariaCam">
+    <FrameLayout
+        android:id="@+id/cameraFrame"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+    </FrameLayout>
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/btnBackCam"
+        android:layout_width="70dp"
+        android:layout_height="70dp"
+        android:layout_margin="16dp"
+        android:src="@drawable/ic_btn_back_camera_black"/>
+
+    <ProgressBar
+        android:id="@+id/progressBCam"
+        android:layout_width="56dp"
+        android:layout_height="56dp"
+        android:visibility="gone"
+        android:layout_centerVertical="true"
+        android:layout_centerHorizontal="true"/>
+
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/fabTakePicture"
+        android:backgroundTint="@color/colorAccent"
+        android:src="@drawable/ic_menu_camera"
+        android:layout_marginStart="290dp"
+        android:layout_marginTop="780dp"
+        android:layout_width="70dp"
+        android:layout_height="70dp" />
+    <RelativeLayout
+        android:id="@+id/relativeFotoTomada"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentTop="true"
+        android:visibility="gone">
+
+        <FrameLayout
+            android:id="@+id/framePImage"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" >
+
+            <ImageView
+                android:id="@+id/imageViewFotoTomada"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:scaleType="matrix"
+                android:src="@drawable/ic_singularia_app" />
+        </FrameLayout>
+    </RelativeLayout>
+    <LinearLayout
+        android:id="@+id/linearPreview"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        android:backgroundTint="@color/colorAccent"
+        android:orientation="vertical"
+        android:layout_marginTop="780dp"
+        android:layout_marginStart="50dp"
+        android:layout_toRightOf="@+id/fabTakePicture">
+        <ImageView
+            android:id="@+id/imgPhotoPreview"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:scaleType="fitXY"
+            android:layout_margin="8dp"/>
+    </LinearLayout>
+</RelativeLayout>

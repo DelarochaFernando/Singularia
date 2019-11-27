@@ -6,21 +6,27 @@
     <item android:title="Catálogo Principal">
         <menu>
                 <item
+                    android:id="@+id/nav_home"
+                    android:icon="@drawable/ic_home"
+                    android:visible="false"
+                    android:title="Inicio" />
+                <item
                     android:id="@+id/nav_invitaciones"
                     android:icon="@drawable/ic_invitation1"
+                    android:visible="false"
                     android:title="Invitaciones" />
                 <item
                     android:id="@+id/nav_pub_escrita"
                     android:icon="@drawable/ic_restmenu"
                     android:title="Publicidad Escrita" />
                 <item
-                    android:id="@+id/nav_playeras"
+                    android:id="@+id/nav_souvenirs"
                     android:icon="@drawable/ic_tshirt"
-                    android:title="Playeras, Tazas y Gorras" />
+                    android:title="Souvenirs" />
                 <item
-                    android:id="@+id/nav_configuracion"
-                    android:icon="@drawable/ic_menu_manage"
-                    android:title="Configuración" />
+                    android:id="@+id/nav_regalos"
+                    android:icon="@drawable/ic_nav_regalos"
+                    android:title="Regalos" />
         </menu>
     </item>
     <!--</group>-->
@@ -29,7 +35,7 @@
             <item
                 android:id="@+id/nav_camera"
                 android:icon="@drawable/ic_menu_camera"
-                android:title="Camera" />
+                android:title="Cámara" />
             <item
                 android:id="@+id/nav_galeria"
                 android:icon="@drawable/ic_menu_gallery"
@@ -37,7 +43,7 @@
 
         </menu>
     </item>
-    <item android:title="Social Media">
+    <!--<item android:title="Social Media">
         <menu>
             <item
                 android:id="@+id/nav_share"
@@ -48,7 +54,7 @@
                 android:icon="@drawable/ic_menu_send"
                 android:title="Send" />
         </menu>
-    </item>
+    </item>-->
     <item android:title="Log out">
         <menu>
             <item

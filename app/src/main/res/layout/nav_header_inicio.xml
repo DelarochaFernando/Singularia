@@ -12,7 +12,28 @@
     android:paddingTop="@dimen/activity_vertical_margin"
     android:theme="@style/ThemeOverlay.AppCompat.Dark">
 
-    <de.hdodenhof.circleimageview.CircleImageView
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+        <de.hdodenhof.circleimageview.CircleImageView
+            android:id="@+id/imageUser"
+            android:layout_width="60dp"
+            android:layout_height="60dp"
+            app:civ_border_width="2dp"
+            android:paddingTop="@dimen/nav_header_vertical_spacing"
+            app:civ_border_color="#66FFFFFF"
+            android:scaleType="centerCrop"
+            app:srcCompat="@drawable/ic_user"/>
+        <ImageView
+            android:id="@+id/btnConfiguration"
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:layout_marginStart="120dp"
+            android:src="@drawable/ic_config_white"
+            />
+    </LinearLayout>
+    <!--<de.hdodenhof.circleimageview.CircleImageView
         android:id="@+id/imageUser"
         android:layout_width="60dp"
         android:layout_height="60dp"
@@ -20,21 +41,20 @@
         android:paddingTop="@dimen/nav_header_vertical_spacing"
         app:civ_border_color="#66FFFFFF"
         android:scaleType="centerCrop"
-        app:srcCompat="@drawable/ic_user"
-         />
+        app:srcCompat="@drawable/ic_user"/>-->
 
     <TextView
         android:id="@+id/textUserName"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:paddingTop="@dimen/nav_header_vertical_spacing"
-        android:text="\@Yazmin2303"
+        android:text=""
         android:textAppearance="@style/TextAppearance.AppCompat.Body1" />
 
     <TextView
         android:id="@+id/textUserEmail"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="yazmin.delarocha@singularia.com" />
+        android:text="" />
 
 </LinearLayout>

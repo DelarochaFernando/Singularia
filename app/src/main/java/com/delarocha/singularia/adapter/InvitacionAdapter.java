@@ -1,19 +1,33 @@
 package com.delarocha.singularia.adapter;
 
 import android.content.Context;
-import android.support.v7.widget.GridLayoutManager;
-import android.support.v7.widget.RecyclerView;
+//import android.support.v7.widget.CardView;
+//import android.support.v7.widget.GridLayoutManager;
+//import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
+import android.widget.ImageView;
+import android.widget.Spinner;
+import android.widget.SpinnerAdapter;
 import android.widget.TextView;
 
 import com.delarocha.singularia.R;
 import com.delarocha.singularia.auxclasses.Invitacion;
 import com.delarocha.singularia.auxclasses.ShopItem;
+import com.delarocha.singularia.auxclasses.Tools;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.squareup.picasso.Picasso;
 
 import java.util.List;
+import java.util.Set;
+
+import androidx.recyclerview.widget.GridLayoutManager;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 /**
  * Created by jmata on 18/12/2018.
@@ -24,6 +38,7 @@ public class InvitacionAdapter extends RecyclerView.Adapter<InvitacionAdapter.Pr
     Context context;
     String mTipoInvitacion;
     List<String> mListaModelos;
+    Set<String> modelos;
     List<List<Invitacion>> data;
     List<ShopItem> selected;
     Invitacion mInvitacion;
@@ -39,6 +54,34 @@ public class InvitacionAdapter extends RecyclerView.Adapter<InvitacionAdapter.Pr
         this.mListaModelos = listaModelos;
         this.mInvitacion = new Invitacion();
     }*/
+
+
+    /*public InvitacionAdapter(Context context, String tipoInvitacion, Set<String> setModelos,
+                             List<List<Invitacion>> listaInvitaciones,
+                             ProductoAdapter.CustomItemClickListener itemCountCallBack) {
+        this.context = context;
+        this.data = listaInvitaciones;
+        this.mTipoInvitacion = tipoInvitacion; //[BabyShower:0, Bautizo:1, Boda:2, Despedida:3, FiestaInf:4, FiestaTem:5, Graduación:6, XV:7]
+        //this.mListaModelos = listaModelos;
+        this.modelos = setModelos;
+        this.selected = null;
+        this.mInvitacion = new Invitacion();
+
+    }
+
+    public InvitacionAdapter(Context context,String tipoInvitacion,Set<String> setModelos,
+                             List<List<Invitacion>> listaInvitaciones,
+                             List<ShopItem> selected,
+                             ProductoAdapter.CustomItemClickListener itemCountCallBack) {
+        this.context = context;
+        this.data = listaInvitaciones;
+        this.mTipoInvitacion = tipoInvitacion; //[BabyShower:0, Bautizo:1, Boda:2, Despedida:3, FiestaInf:4, FiestaTem:5, Graduación:6, XV:7]
+        //this.mListaModelos = listaModelos;
+        this.modelos = setModelos;
+        this.mInvitacion = new Invitacion();
+        this.selected = selected;
+    }*/
+
     public InvitacionAdapter(Context context,String tipoInvitacion,List<String> listaModelos,
                              List<List<Invitacion>> listaInvitaciones,
                              ProductoAdapter.CustomItemClickListener itemCountCallBack) {
@@ -61,7 +104,6 @@ public class InvitacionAdapter extends RecyclerView.Adapter<InvitacionAdapter.Pr
         this.mListaModelos = listaModelos;
         this.mInvitacion = new Invitacion();
         this.selected = selected;
-
     }
 
     @Override
@@ -77,17 +119,32 @@ public class InvitacionAdapter extends RecyclerView.Adapter<InvitacionAdapter.Pr
 
 
         String modelo = mListaModelos.get(position);
+        //String modelo = modelos.toArray()[position].toString();
         List<Invitacion> invitas = data.get(position);
         holder.txtModeloInvita.setText(modelo);
         GridLayoutManager mGridLayoutManager = new GridLayoutManager(context,2);
+        LinearLayoutManager mLinearLayoutManager = new LinearLayoutManager(context,LinearLayoutManager.HORIZONTAL,false);
         if(selected==null){
-            productoAdapter = new ProductoAdapter(context,mTipoInvitacion,mListaModelos,invitas,customItemClickListener);
+            //productoAdapter = new ProductoAdapter(context,mTipoInvitacion,mListaModelos,invitas,customItemClickListener);
+            productoAdapter = new ProductoAdapter(context,mTipoInvitacion,modelos,invitas,customItemClickListener);
         }else {
-            productoAdapter = new ProductoAdapter(context,mTipoInvitacion,mListaModelos,invitas,selected,customItemClickListener);
+            //productoAdapter = new ProductoAdapter(context,mTipoInvitacion,mListaModelos,invitas,selected,customItemClickListener);
+            productoAdapter = new ProductoAdapter(context,mTipoInvitacion,modelos,invitas,selected,customItemClickListener);
         }
 
         holder.recyclerContainer.setAdapter(productoAdapter);
-        holder.recyclerContainer.setLayoutManager(mGridLayoutManager);
+        double diagInch = Tools.getDiagonalInch(context);
+        if(diagInch<9 && diagInch>=6.5) {
+            // small tab (7 inch tab)
+            holder.recyclerContainer.setLayoutManager(mGridLayoutManager);
+        } else if(diagInch>9) {
+            // big tab (10 inch tab)
+            holder.recyclerContainer.setLayoutManager(mGridLayoutManager);
+        } else {
+            //phones s2,s3 s4 etc devices
+            //holder.recyclerContainer.setLayoutManager(mLinearLayoutManager);
+            holder.recyclerContainer.setLayoutManager(mGridLayoutManager);
+        }
         holder.recyclerContainer.setHasFixedSize(true);
         /*
         Picasso.with(context).load(mInvitacion.getImg_string()).fit().into(holder.imgItem);
@@ -128,6 +185,7 @@ public class InvitacionAdapter extends RecyclerView.Adapter<InvitacionAdapter.Pr
     @Override
     public int getItemCount() {
         return mListaModelos.size();
+        //return modelos.size();
     }
 
     public int getShopCartItemQty(){
