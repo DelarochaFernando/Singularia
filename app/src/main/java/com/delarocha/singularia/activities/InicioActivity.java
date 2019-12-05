@@ -119,8 +119,6 @@ public class InicioActivity extends AppCompatActivity implements
     private ImageView imgIconShopCart;
     private View content_inicio, content_tipoInvita;
 
-    //Probar funcionalidad de GitHub.
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
